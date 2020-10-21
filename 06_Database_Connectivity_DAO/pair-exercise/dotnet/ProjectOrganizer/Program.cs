@@ -18,9 +18,9 @@ namespace ProjectOrganizer
 
             string connectionString = configuration.GetConnectionString("Project");
 
-            IProjectDAO projectDAO = null;
-            IEmployeeDAO employeeDAO = null;
-            IDepartmentDAO departmentDAO = null;
+            IProjectDAO projectDAO = new ProjectSqlDAO(connectionString);
+            IEmployeeDAO employeeDAO = new EmployeeSqlDAO(connectionString);
+            IDepartmentDAO departmentDAO = new DepartmentSqlDAO(connectionString);
 
             ProjectCLI projectCLI = new ProjectCLI(employeeDAO, projectDAO, departmentDAO);
             projectCLI.RunCLI();
