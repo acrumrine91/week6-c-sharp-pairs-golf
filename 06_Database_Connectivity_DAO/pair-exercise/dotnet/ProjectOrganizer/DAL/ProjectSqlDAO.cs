@@ -87,7 +87,39 @@ namespace ProjectOrganizer.DAL
         /// <returns>If it was successful.</returns>
         public bool AssignEmployeeToProject(int projectId, int employeeId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("INSERT INTO project_employee VALUES (@project_id, @employee_id);", conn);
+                    cmd.Parameters.AddWithValue("@project_id", projectId);
+                    cmd.Parameters.AddWithValue("@employee_id ", employeeId);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Now print the new Project Id
+                    //cmd = new SqlCommand("SELECT MAX(project_id) FROM project;", conn);
+                    //id = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    Console.WriteLine($"Employee {employeeId} is now assigned to Project {projectId}");
+                    if (rowsAffected > 0)
+                    {
+                        return true; // change was successful
+                    }
+                    else
+                    {
+                        return false; // rowsAffected is 0, change was NOT successful
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error adding employee to project.");
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
         /// <summary>
@@ -98,7 +130,39 @@ namespace ProjectOrganizer.DAL
         /// <returns>If it was successful.</returns>
         public bool RemoveEmployeeFromProject(int projectId, int employeeId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("DELETE FROM project_employee WHERE project_id = @project_id AND employee_id = @employee_id;", conn);
+                    cmd.Parameters.AddWithValue("@project_id", projectId);
+                    cmd.Parameters.AddWithValue("@employee_id ", employeeId);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Now print the new Project Id
+                    //cmd = new SqlCommand("SELECT MAX(project_id) FROM project;", conn);
+                    //id = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    Console.WriteLine($"Employee {employeeId} is now removed from Project {projectId}");
+                    if (rowsAffected > 0)
+                    {
+                        return true; // change was successful
+                    }
+                    else
+                    {
+                        return false; // rowsAffected is 0, change was NOT successful
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Error adding employee to project.");
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
         /// <summary>
