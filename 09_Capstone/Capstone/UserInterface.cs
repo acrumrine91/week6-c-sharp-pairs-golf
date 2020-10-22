@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Capstone.DAL;
 
 namespace Capstone
 {
@@ -10,12 +11,21 @@ namespace Capstone
         //ALL Console.ReadLine and WriteLine in this class
         //NONE in any other class
 
-        private string connectionString;
+        public string connectionString;
+        private IVenueDAO venueDAO;
+
 
         public UserInterface(string connectionString)
         {
             this.connectionString = connectionString;
+
         }
+
+        public UserInterface(IVenueDAO venueDAO)
+        {
+            this.venueDAO = venueDAO;
+        }
+
 
         public void Run()
         {
@@ -32,20 +42,20 @@ namespace Capstone
 
             if (userInput == "1")
             {
-                ListVenues();
+                GetVenues();
             }
             else return;
         }
 
-        public void ListVenues()
+        private void GetVenues()
         {
-            IList<Venue> venues = venueDAO.ListVenues();
+            IList<Venue> venues = venueDAO.GetVenues();
             Console.WriteLine("This is the view venues menu");
-            for (int index = 0; index < venues.Count; index++)
+            for (int index = 1; index < venues.Count; index++)
             {
                 Console.WriteLine(index + ") - " + venues[index]);
 
-              //  Console.WriteLine(Venue.Name);
+               // Console.WriteLine(Venue.Name);
             }
             
             Console.WriteLine("R) or press any other key to return to main menu");

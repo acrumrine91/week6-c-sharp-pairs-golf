@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Capstone.DAL
 {
-    public class VenueSqlDAO
+    public class VenueSqlDAO: IVenueDAO
     {
         private string connectionString;
 
@@ -15,9 +15,9 @@ namespace Capstone.DAL
             connectionString = databaseConnectionString;
         }
 
-        public IList<Venue> GetVenues()
+        public List<Venue> GetVenues()
         {
-            List<Venue> venues = new List<Venue>();
+            IList<Venue> venues = new List<Venue>();
 
             // maybe we are going to add a trycatch
 
