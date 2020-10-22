@@ -10,7 +10,8 @@ List venues goes to
 
 View Venues Menu (VVM)
 Which venue?
-	it lists the venues - loop through venue.name and list each as an option
+	it lists the venues (alphabetically) - loop through venue.name
+	list each venue as an option
 	R return (press any other key)
 CRL
 
@@ -20,8 +21,8 @@ Venue Details (VD)
 venue.name
 Location: city.name, city.state_abbreviation
 Categories: loop through category.name and list each associated with venue.id
-
 venue.description
+
 	1) view spaces
 	2) search for reservation
 	return press any other key
@@ -30,7 +31,7 @@ CRL
 
 VD1
 Lists venue spaces
-Space.Id - Space.name - space.open_from(month) - space.open_to(month) - space.daily_rate - space.max_occupancy
+Space.Id - Space.name - space.open_from(month) - space.open_to(month) - space.is_accessible - space.daily_rate - space.max_occupancy
 	1) reserve space 
 	return to previous
 CRL
@@ -40,8 +41,17 @@ CRL
 Reserve Space Menu (RSM)
 CRL When do you need space
 CRL how many days
+(check if this reservation overlaps with existing - reservation.start_date to reservation.end_date)
 CRL how many people
+(check if this goes over space.max_occupancy)
 
+
+(IF NO SPACES AVAILABLE)
+Ask if they would like to try a different search (Yes?)
+press any other key to cancel search
+
+
+(IF SPACES AVAILABLE)
 The following spaces availabale (TOP 5)
 Space.Id - Space.name - space.daily_rate - space.max_occupancy - space.is_accessible - ((how many days) * space.daily_rate)
 
@@ -57,6 +67,9 @@ reservation.reserved_for
 (when do you need space) date
 (when do you need space) + (how many days) date
 (how many days * space.daily_rate)
+
+After the details are listed,
+Go back to (List venue spaces menu)
 
 
 
