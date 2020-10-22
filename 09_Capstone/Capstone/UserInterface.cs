@@ -18,13 +18,14 @@ namespace Capstone
         public UserInterface(string connectionString)
         {
             this.connectionString = connectionString;
+            venueDAO = new VenueSqlDAO(connectionString);
 
         }
 
-        public UserInterface(IVenueDAO venueDAO)
-        {
-            this.venueDAO = venueDAO;
-        }
+        //public UserInterface(IVenueDAO venueDAO)
+        //{
+        //    this.venueDAO = venueDAO;
+        //}
 
 
         public void Run()
@@ -51,9 +52,9 @@ namespace Capstone
         {
             IList<Venue> venues = venueDAO.GetVenues();
             Console.WriteLine("This is the view venues menu");
-            for (int index = 1; index < venues.Count; index++)
+            for (int index = 0; index < venues.Count; index++)
             {
-                Console.WriteLine(index + ") - " + venues[index]);
+                Console.WriteLine(index + 1 + ") - " + venues[index].Name);
 
                // Console.WriteLine(Venue.Name);
             }
