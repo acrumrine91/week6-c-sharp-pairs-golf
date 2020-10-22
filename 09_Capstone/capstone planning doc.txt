@@ -1,0 +1,63 @@
+User interface
+
+Main Menu (MM)
+	1) list venues
+	Q quit
+CRL
+
+List venues goes to
+
+
+View Venues Menu (VVM)
+Which venue?
+	it lists the venues - loop through venue.name and list each as an option
+	R return (press any other key)
+CRL
+
+
+
+Venue Details (VD)
+venue.name
+Location: city.name, city.state_abbreviation
+Categories: loop through category.name and list each associated with venue.id
+
+venue.description
+	1) view spaces
+	2) search for reservation
+	return press any other key
+CRL
+
+
+VD1
+Lists venue spaces
+Space.Id - Space.name - space.open_from(month) - space.open_to(month) - space.daily_rate - space.max_occupancy
+	1) reserve space 
+	return to previous
+CRL
+
+
+
+Reserve Space Menu (RSM)
+CRL When do you need space
+CRL how many days
+CRL how many people
+
+The following spaces availabale (TOP 5)
+Space.Id - Space.name - space.daily_rate - space.max_occupancy - space.is_accessible - ((how many days) * space.daily_rate)
+
+CRL which space would you like to reserve (enter 0 to cancel) - 
+CRL who is this reservation for
+
+DETAILS LISTED BELOW
+Reservation.id
+venue.name
+space.name
+reservation.reserved_for
+(how many people) int
+(when do you need space) date
+(when do you need space) + (how many days) date
+(how many days * space.daily_rate)
+
+
+
+
