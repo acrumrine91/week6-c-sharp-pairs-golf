@@ -130,11 +130,13 @@ namespace Capstone
             Console.WriteLine("");
             Console.WriteLine(venues[venueNum].Name);
             Console.WriteLine("");
-            Console.WriteLine("");
+            Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
+                "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
             foreach (Space space in spaces)
             {
                 Console.WriteLine(space);
-            }    
+            }
+            Console.WriteLine("");
             Console.WriteLine("What would you like to do next?");
             Console.WriteLine("1) Reserve a space");
             Console.ReadLine();
