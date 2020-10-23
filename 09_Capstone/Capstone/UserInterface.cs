@@ -164,9 +164,42 @@ namespace Capstone
             IList<Venue> venues = venueDAO.GetVenues();
             IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
             IList<Reservation> reservations = reservationDAO.GetReservations(spaces);
+            bool done = false;
+            while (!done)
+            {
+                Console.WriteLine("Search for available spaces");
+                Console.WriteLine("When do you need the space? MM/DD/YEAR");
+                string inputDay = Console.ReadLine();
+                
+                bool correctInput = DateTime.TryParse(inputDay, out DateTime startDate);
+                if (correctInput == false || startDate < DateTime.Now)
+                {
+                    Console.WriteLine("Please input a correct date format");
+                    return;
+                }
+                Console.WriteLine("How many days will you need the space?");
+                string dayNumber = Console.ReadLine();
 
-            Console.WriteLine("Search for available spaces");
-            
+                bool parseDays = Int32.TryParse(dayNumber, out int numOfDays);
+                if (parseDays == false || numOfDays <= 0)
+                {
+                    Console.WriteLine("Please input a number of days");
+                    return;
+                }
+                Console.WriteLine("How many people will be in attendance?");
+                string attendNum = Console.ReadLine();
+
+                bool parseOccupancy = Int32.TryParse(dayNumber, out int peopleAttending);
+                if (parseOccupancy == false || peopleAttending <= 0)
+                {
+                    Console.WriteLine("Please input the number of people attending");
+                    return;
+                }
+                IList<Space> availableSpaces = reservationDAO.FindSpacesAvailable(spaces, reservations, startDate, numOfDays, peopleAttending);
+
+
+            }
+
 
         }
 

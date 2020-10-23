@@ -8,5 +8,7 @@ namespace Capstone.DAL
     public interface IReservationDAO
     {
         IList<Reservation> GetReservations(IList<Space> spaces);
+        IList<Space> FindSpacesAvailable(IList<Space> spaces, IList<Reservation> reservation, DateTime startDate, int numOfDays, int peopleAttending);
+
     }
 }

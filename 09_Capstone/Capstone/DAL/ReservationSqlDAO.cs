@@ -54,6 +54,10 @@ namespace Capstone.DAL
             return reservation;
         }
 
-        
+        public IList<Space> FindSpacesAvailable(IList<Space> spaces, IList<Reservation> reservation, DateTime startDate, int numOfDays, int peopleAttending)
+        {
+            IList<Space> greg = new List<Space>();
+            return greg;
+        }
     }
 }
