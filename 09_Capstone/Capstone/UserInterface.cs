@@ -119,7 +119,7 @@ namespace Capstone
                 {
                     ListVenueSpacesMenu(venueNum);
                 }
-                if (userInput == "2")
+                else if (userInput == "2")
                 {
                     SearchAndMakeReservationMenu(venueNum);
                 }
@@ -148,7 +148,12 @@ namespace Capstone
                 Console.WriteLine("");
                 Console.WriteLine("What would you like to do next?");
                 Console.WriteLine("1) Reserve a space");
-                Console.ReadLine();
+                Console.WriteLine("Press any other key to RETURN to the venue details");
+                string userInput = Console.ReadLine();
+                if (userInput == "1")
+                {
+                    SearchAndMakeReservationMenu(venueNum);
+                }
                 done = true;
             }
 
@@ -159,11 +164,8 @@ namespace Capstone
             IList<Venue> venues = venueDAO.GetVenues();
             IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
             IList<Reservation> reservations = reservationDAO.GetReservations(spaces);
-            bool done = false;
-            while (!done)
-            {
-                done = true;
-            }
+
+            Console.WriteLine("Search for available spaces");
             
 
         }
