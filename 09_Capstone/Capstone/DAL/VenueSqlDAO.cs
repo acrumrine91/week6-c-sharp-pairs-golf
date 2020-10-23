@@ -15,7 +15,7 @@ namespace Capstone.DAL
             connectionString = databaseConnectionString;
         }
 
-        public List<Venue> GetVenues()
+        public IList<Venue> GetVenues()
         {
             IList<Venue> venues = new List<Venue>();
 
