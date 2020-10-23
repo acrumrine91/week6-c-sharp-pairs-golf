@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Capstone.DAL
 {
-    public class VenueSqlDAO: IVenueDAO
+    public class VenueSqlDAO : IVenueDAO
     {
         private string connectionString;
 
@@ -39,6 +39,8 @@ namespace Capstone.DAL
             return venues;
 
         }
+
+
 
         private Venue ConvertReaderToTypeVenue(SqlDataReader reader)
         {
