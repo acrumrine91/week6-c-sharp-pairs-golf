@@ -15,6 +15,7 @@ namespace Capstone
         private IVenueDAO venueDAO;
         private ICityDAO cityDAO;
         private ISpaceDAO spaceDAO;
+        private IReservationDAO reservationDAO;
 
 
         public UserInterface(string connectionString)
@@ -23,6 +24,7 @@ namespace Capstone
             venueDAO = new VenueSqlDAO(connectionString);
             cityDAO = new CitySqlDAO(connectionString);
             spaceDAO = new SpaceSqlDAO(connectionString);
+            reservationDAO = new ReservationSqlDAO(connectionString);
 
         }
 
@@ -108,7 +110,7 @@ namespace Capstone
                 Console.WriteLine("What would you like to do next?");
                 Console.WriteLine("");
                 Console.WriteLine("1) View Spaces");
-                // is search for reservation bonus???
+                Console.WriteLine("2) Search for reservation");
                 Console.WriteLine("");
                 Console.WriteLine("Press any other key to RETURN to our list of Venues");
                 string userInput = Console.ReadLine();
@@ -117,6 +119,10 @@ namespace Capstone
                 {
                     ListVenueSpacesMenu(venueNum);
                 }
+                if (userInput == "2")
+                {
+                    SearchAndMakeReservationMenu(venueNum);
+                }
 
                 else done = true;
             }
@@ -124,22 +130,41 @@ namespace Capstone
 
         public void ListVenueSpacesMenu(int venueNum)
         {
+            bool done = false;
+            while (!done)
+            {
+                IList<Venue> venues = venueDAO.GetVenues();
+                IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine(venues[venueNum].Name);
+                Console.WriteLine("");
+                Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
+                    "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
+                foreach (Space space in spaces)
+                {
+                    Console.WriteLine(space);
+                }
+                Console.WriteLine("");
+                Console.WriteLine("What would you like to do next?");
+                Console.WriteLine("1) Reserve a space");
+                Console.ReadLine();
+                done = true;
+            }
+
+        }
+
+        public void SearchAndMakeReservationMenu(int venueNum)
+        {
             IList<Venue> venues = venueDAO.GetVenues();
             IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine(venues[venueNum].Name);
-            Console.WriteLine("");
-            Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
-                "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
-            foreach (Space space in spaces)
+            IList<Reservation> reservations = reservationDAO.GetReservations(spaces);
+            bool done = false;
+            while (!done)
             {
-                Console.WriteLine(space);
+                done = true;
             }
-            Console.WriteLine("");
-            Console.WriteLine("What would you like to do next?");
-            Console.WriteLine("1) Reserve a space");
-            Console.ReadLine();
+            
 
         }
 
