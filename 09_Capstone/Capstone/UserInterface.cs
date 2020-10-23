@@ -13,12 +13,16 @@ namespace Capstone
 
         public string connectionString;
         private IVenueDAO venueDAO;
+        private ICityDAO cityDAO;
+        private ISpaceDAO spaceDAO;
 
 
         public UserInterface(string connectionString)
         {
             this.connectionString = connectionString;
             venueDAO = new VenueSqlDAO(connectionString);
+            cityDAO = new CitySqlDAO(connectionString);
+            spaceDAO = new SpaceSqlDAO(connectionString);
 
         }
 
@@ -30,69 +34,110 @@ namespace Capstone
 
         public void Run()
         {
-            Console.WriteLine("Welcome to Excelsior Venue Services.");
-            Console.WriteLine("You can use this system to seek and book our available spaces.");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("~==MAIN MENU==~");
-            Console.WriteLine("Please select from the menu below.");
-            Console.WriteLine("");
-            Console.WriteLine("1) List Venues");
-            Console.WriteLine("Q) or any other key to quit");
-            string userInput = Console.ReadLine();
 
-            if (userInput == "1")
+            bool done = false;
+            while (!done)
             {
-                GetVenues();
+                Console.WriteLine("Welcome to Excelsior Venue Services.");
+                Console.WriteLine("You can use this system to seek and book our available spaces.");
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("~==MAIN MENU==~");
+                Console.WriteLine("Please select from the menu below.");
+                Console.WriteLine("");
+                Console.WriteLine("1) List Venues");
+                Console.WriteLine("Q) or any other key to quit");
+                string userInput = Console.ReadLine();
+
+                if (userInput == "1")
+                {
+                    GetVenues();
+                }
+                else done = true;
             }
-            else return;
         }
 
         private void GetVenues()
         {
-            IList<Venue> venues = venueDAO.GetVenues();
-            Console.WriteLine("This is the view venues menu");
-            for (int index = 0; index < venues.Count; index++)
+            bool done = false;
+            while (!done)
             {
-                Console.WriteLine(index + 1 + ") - " + venues[index].Name);
+                IList<Venue> venues = venueDAO.GetVenues();
+                Console.WriteLine("~~ View Venues Menu ~~");
+                Console.WriteLine("Please type in the number of the venue you want to select below");
+                for (int index = 0; index < venues.Count; index++)
+                {
+                    Console.WriteLine(index + 1 + ") - " + venues[index].Name);
+                }
+                Console.WriteLine("Press any other key to RETURN to our main menu.");
+                string userInput = Console.ReadLine();
 
-               // Console.WriteLine(Venue.Name);
+                bool isParsable = Int32.TryParse(userInput, out int userNumber);
+                int venueNum = userNumber - 1;
+                if (isParsable)
+                {
+                    if ((venueNum >= 0) && (venueNum < venues.Count))
+                    {
+                        VenueDetailsMenu(venueNum);
+                    }
+                    else return;
+                }
+                else done = true;
             }
-            
-            Console.WriteLine("R) or press any other key to return to main menu");
-            string userInput = Console.ReadLine();
-
-            
-          
-        }
-
-        public void VenuDetailsMenu(string userInput)
-        {
-            //GetVenueDetails(); Method to call details listed below
-
-
-            //Console.WriteLine("name of venue"); // use connection string to use name selected
-            //Console.WriteLine("Location: (city name), (city state abbrev)"); // use city and city state associated with venue selected
-            //Console.WriteLine("Categories: "); //(categories associated with venue selected)
-            //Console.WriteLine("");
-            //Console.WriteLine("venue description"); // use description associated with the venue
-            //Console.WriteLine("");
-            //Console.WriteLine("1) View Venue Spaces");
-            //Console.WriteLine("2) Search for Reservation"); (might BE A BONE US)
-            //Console.WriteLine("R) or press any other key to return to the list of venues");
-            //string nextInput = Console.ReadLine();
 
         }
 
-        public void ListVenueSpacesMenu()
+        public void VenueDetailsMenu(int venueNum)
         {
-            Console.WriteLine("Name of venue space they selected");
+            bool done = false;
+            while (!done)
+            {
+                IList<Venue> venues = venueDAO.GetVenues();
+                City city = cityDAO.GetVenueCity(venues[venueNum].CityId);
+                //Need to get city and state lists and then write their info below
+                //same ways we did the other method
+                Console.WriteLine("");
+                Console.WriteLine("~~VENUE DETAILS~~");
+                Console.WriteLine("");
+                Console.WriteLine(venues[venueNum].Name);
+                Console.WriteLine("Location: " + city.Name + ", " + city.StateAbbreviation);
+                Console.WriteLine("");
+                Console.WriteLine(venues[venueNum].Description);
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("What would you like to do next?");
+                Console.WriteLine("");
+                Console.WriteLine("1) View Spaces");
+                // is search for reservation bonus???
+                Console.WriteLine("");
+                Console.WriteLine("Press any other key to RETURN to our list of Venues");
+                string userInput = Console.ReadLine();
 
-            //list of spaces with info goes here
+                if (userInput == "1")
+                {
+                    ListVenueSpacesMenu(venueNum);
+                }
 
+                else done = true;
+            }
+        }
 
+        public void ListVenueSpacesMenu(int venueNum)
+        {
+            IList<Venue> venues = venueDAO.GetVenues();
+            IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine(venues[venueNum].Name);
+            Console.WriteLine("");
+            Console.WriteLine("");
+            foreach (Space space in spaces)
+            {
+                Console.WriteLine(space);
+            }    
             Console.WriteLine("What would you like to do next?");
             Console.WriteLine("1) Reserve a space");
+            Console.ReadLine();
 
         }
 

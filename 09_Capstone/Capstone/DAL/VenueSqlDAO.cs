@@ -40,6 +40,8 @@ namespace Capstone.DAL
 
         }
 
+
+
         private Venue ConvertReaderToTypeVenue(SqlDataReader reader)
         {
             Venue venyou = new Venue();
