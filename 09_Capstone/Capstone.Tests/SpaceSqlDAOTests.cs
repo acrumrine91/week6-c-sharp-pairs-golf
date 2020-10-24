@@ -28,16 +28,18 @@ namespace Capstone.Tests
         }
 
         [TestMethod]
-        public void GetVenueSpacesShouldReturnAllVenueSpaces()
+        [DataRow(1, 7)]
+        [DataRow(2, 4)]
+        public void GetVenueSpacesShouldReturnAllVenueSpaces(int venueNum, int expectedCount)
         {
             //Arrange
             SpaceSqlDAO dao = new SpaceSqlDAO(ConnectionString);
 
             //Act
-            IList<Space> spaces = dao.GetVenueSpaces(1);
+            IList<Space> spaces = dao.GetVenueSpaces(venueNum);
 
             //Assert
-            Assert.AreEqual(7, spaces.Count);
+            Assert.AreEqual(expectedCount, spaces.Count);
         }
     }
 }
