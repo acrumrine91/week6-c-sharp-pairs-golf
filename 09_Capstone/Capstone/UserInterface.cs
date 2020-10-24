@@ -130,6 +130,7 @@ namespace Capstone
 
         public void ListVenueSpacesMenu(int venueNum)
         {
+
             venueNum += 1;
             bool done = false;
             while (!done)
@@ -138,7 +139,7 @@ namespace Capstone
                 IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
                 Console.WriteLine("");
                 Console.WriteLine("");
-                Console.WriteLine(venues[venueNum].Name);
+                Console.WriteLine(venues[venueNum - 1].Name);
                 Console.WriteLine("");
                 Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
                     "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
@@ -269,7 +270,7 @@ namespace Capstone
             Console.WriteLine("Your details and confirmation ID are listed below");
             Console.WriteLine("");
             Console.WriteLine("Confirmation #: " + confirmationID);
-            Console.WriteLine("Venue: " + venues[venueNum].Name);
+            Console.WriteLine("Venue: " + venues[venueNum - 1].Name);
             Console.WriteLine("Space: " + bookedSpace.Name);
             Console.WriteLine("Reserved For: " + reservedFor);
             Console.WriteLine("Attendees: " + numattend);
