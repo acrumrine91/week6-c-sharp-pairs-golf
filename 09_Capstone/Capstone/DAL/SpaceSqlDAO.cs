@@ -20,7 +20,7 @@ namespace Capstone.DAL
         {
             IList<Space> spaces = new List<Space>();
 
-            string venue_id = (venueNum + 1).ToString();
+            string venue_id = venueNum.ToString();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();

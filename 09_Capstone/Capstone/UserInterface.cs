@@ -62,49 +62,58 @@ namespace Capstone
 
         private void GetVenues()
         {
-            bool done = false;
-            while (!done)
+            try
             {
-                IList<Venue> venues = venueDAO.GetVenues();
-                Console.WriteLine("~~ View Venues Menu ~~");
-                Console.WriteLine("Please type in the number of the venue you want to select below");
-                for (int index = 0; index < venues.Count; index++)
+
+                bool done = false;
+                while (!done)
                 {
-                    Console.WriteLine(index + 1 + ") - " + venues[index].Name);
+                    IList<Venue> venues = venueDAO.GetVenues();
+                    Console.WriteLine("~~ View Venues Menu ~~");
+                    Console.WriteLine("Please type in the number of the venue you want to select below");
+                    for (int index = 0; index < venues.Count; index++)
+                    {
+                        Console.WriteLine(index + 1 + ") - " + venues[index].Name);
+                    }
+                    Console.WriteLine("Press any other key to RETURN to our main menu.");
+                    string userInput = Console.ReadLine();
+
+                    int inputNumber = int.Parse(userInput);
+                    int venueIndexNum = inputNumber - 1;
+
+                    if ((venueIndexNum >= 0) && (venueIndexNum < venues.Count))
+                    {
+                        VenueDetailsMenu(venueIndexNum);
+                    }
+
+
+                    else done = true;
                 }
-                Console.WriteLine("Press any other key to RETURN to our main menu.");
-                string userInput = Console.ReadLine();
 
-                int userNumber = int.Parse(userInput);
-                int venueNum = userNumber - 1;
-
-                if ((venueNum >= 0) && (venueNum < venues.Count))
-                {
-                    VenueDetailsMenu(venueNum);
-                }
-
-
-                else done = true;
             }
-
+            catch (System.FormatException)
+            {
+                Console.WriteLine("Please enter a valid venue number");
+                return;
+            }
         }
 
-        public void VenueDetailsMenu(int venueNum)
+        public void VenueDetailsMenu(int venueIndexNum)
         {
             bool done = false;
             while (!done)
             {
                 IList<Venue> venues = venueDAO.GetVenues();
-                City city = cityDAO.GetVenueCity(venues[venueNum].CityId);
+                City city = cityDAO.GetVenueCity(venues[venueIndexNum].CityId);
                 //Need to get city and state lists and then write their info below
                 //same ways we did the other method
                 Console.WriteLine("");
                 Console.WriteLine("~~VENUE DETAILS~~");
                 Console.WriteLine("");
-                Console.WriteLine(venues[venueNum].Name);
+                Console.WriteLine(venues[venueIndexNum].Name);
                 Console.WriteLine("Location: " + city.Name + ", " + city.StateAbbreviation);
                 Console.WriteLine("");
-                Console.WriteLine(venues[venueNum].Description);
+                Console.WriteLine(venues[venueIndexNum].Description);
                 Console.WriteLine("");
                 Console.WriteLine("");
                 Console.WriteLine("What would you like to do next?");
@@ -117,11 +126,11 @@ namespace Capstone
 
                 if (userInput == "1")
                 {
-                    ListVenueSpacesMenu(venueNum);
+                    ListVenueSpacesMenu(venueIndexNum);
                 }
                 else if (userInput == "2")
                 {
-                    SearchAndMakeReservationMenu(venueNum);
+                    SearchAndMakeReservationMenu(venueIndexNum);
 
                 }
 
@@ -131,7 +140,7 @@ namespace Capstone
 
         public void ListVenueSpacesMenu(int venueNum)
         {
-
+            venueNum += 1;
             bool done = false;
             while (!done)
             {
@@ -139,7 +148,7 @@ namespace Capstone
                 IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
                 Console.WriteLine("");
                 Console.WriteLine("");
-                Console.WriteLine(venues[venueNum].Name);
+                Console.WriteLine(venues[venueNum - 1].Name);
                 Console.WriteLine("");
                 Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
                     "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
@@ -163,6 +172,7 @@ namespace Capstone
 
         public void SearchAndMakeReservationMenu(int venueNum)
         {
+            venueNum += 1;
             IList<Venue> venues = venueDAO.GetVenues();
             IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
             IList<Reservation> reservations = reservationDAO.GetReservations(spaces);
