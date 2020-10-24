@@ -170,7 +170,7 @@ namespace Capstone
                 Console.WriteLine("Search for available spaces");
                 Console.WriteLine("When do you need the space? MM/DD/YEAR");
                 string inputDay = Console.ReadLine();
-                
+
                 bool correctInput = DateTime.TryParse(inputDay, out DateTime startDate);
                 if (correctInput == false || startDate < DateTime.Now)
                 {
@@ -197,12 +197,14 @@ namespace Capstone
                 }
                 //bool isAvailable = reservationDAO.AreDatesAvailable(spaces, reservations, startDate, numOfDays);
                 Console.WriteLine("Still testing");
-                foreach(Space space in spaces)
+
+                List<Space> toRemove = new List<Space>();
+                foreach (Space space in spaces)
                 {
                     bool available = reservationDAO.IsDateAvailable(reservations, space, startDate, numOfDays);
                     if (available == false)
                     {
-                        spaces.Remove(space);
+                        toRemove.Add(space);
                     }
                 }
                 foreach (Space space in spaces)
@@ -210,7 +212,7 @@ namespace Capstone
                     bool available = reservationDAO.IsSpaceOperating(space, startDate, numOfDays);
                     if (available == false)
                     {
-                        spaces.Remove(space);
+                        toRemove.Add(space);
                     }
                 }
                 foreach (Space space in spaces)
@@ -218,15 +220,37 @@ namespace Capstone
                     bool available = reservationDAO.IsBookingBelowMaxOcc(space, peopleAttending);
                     if (available == false)
                     {
-                        spaces.Remove(space);
+                        toRemove.Add(space);
                     }
                 }
-                Console.WriteLine(spaces);
+                foreach (Space removal in toRemove)
+                {
+                    spaces.Remove(removal);
+                }
 
+                Console.WriteLine("");
+                Console.WriteLine("Space #".PadRight(9) + "Name".PadRight(25) + "Daily Rate".PadRight(12) +
+                "Max Occup".PadRight(10) + "Accessible?".PadRight(12) + "Total Cost".PadRight(13));
+                foreach (Space space in spaces)
+                {
+                    decimal totalCost = space.DailyRate * numOfDays;
+                    Console.WriteLine(space.Id.ToString().PadRight(9) + space.Name.PadRight(25) +
+                        space.DailyRate.ToString("C").PadRight(12) + space.MaxOccupancy.ToString().PadRight(10) +
+                        space.IsAccessible.ToString().PadRight(12) + totalCost.ToString("C"));
+
+                }
+                Console.WriteLine("");
+                Console.WriteLine("Which space would you like to reserve? (Please enter Space #)");
+                string spaceIDChosen = Console.ReadLine();
+                Console.WriteLine("Who is this reservation for?");
+                string reservedFor = Console.ReadLine();
+
+                //ADD METHOD TO GO TO CONFIRMATION AND TO ADD TO RESERVATION DATABASE
             }
-
-
         }
 
+
     }
+
 }
+

@@ -78,17 +78,20 @@ namespace Capstone.DAL
         public bool IsSpaceOperating(Space space, DateTime startDate, int numOfDays)
         {
             List<DateTime> newBookingDates = Enumerable.Range(0, numOfDays).Select(i => startDate.AddDays(i)).ToList();
-
             if (space.OpenFrom == "")
             {
                 return true;
             }
 
+            string[] monthAbbrevOpen = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
+            int index = Array.IndexOf(monthAbbrevOpen, space.OpenFrom) + 1;
+            DateTime openDay = new DateTime(2020, index, 1);
 
-            string openMonthNum = space.OpenFrom.ToString("MMMM");
-            DateT
-            DateTime closeDay = DateTime.Parse(space.OpenTo);
-            int daysOpen = (closeDay - openDay).Days + 31;
+            string[] monthAbbrevClose = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
+            int monthClose = Array.IndexOf(monthAbbrevClose, space.OpenTo) + 1;
+            DateTime closeDay = new DateTime(2020, monthClose + 1, 1).AddDays(-1);
+
+            int daysOpen = (closeDay - openDay).Days;
             
             List<DateTime> openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
             bool openForBooking = newBookingDates.All(openRange.Contains);
