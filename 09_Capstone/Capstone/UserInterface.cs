@@ -197,7 +197,7 @@ namespace Capstone
                     return;
                 }
                 //bool isAvailable = reservationDAO.AreDatesAvailable(spaces, reservations, startDate, numOfDays);
-                Console.WriteLine("Still testing");
+                //Console.WriteLine("Still testing");
 
                 List<Space> toRemove = new List<Space>();
                 foreach (Space space in spaces)
@@ -247,6 +247,9 @@ namespace Capstone
                 string reservedFor = Console.ReadLine();
 
                 //ADD METHOD TO GO TO CONFIRMATION AND TO ADD TO RESERVATION DATABASE
+
+
+
             }
         }
 
