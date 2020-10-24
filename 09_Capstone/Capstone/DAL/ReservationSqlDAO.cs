@@ -153,6 +153,44 @@ namespace Capstone.DAL
             return true;
 
         }
+        public string AddReservationToSql(string spaceIDChosen, string reservedFor, DateTime startDate, int numOfDays, int peopleAttending)
+        {
+            int spaceID = Convert.ToInt32(spaceIDChosen);
+            DateTime endDate = startDate.AddDays(numOfDays);
+            Reservation newReservation = new Reservation
+            {
+                SpaceId = spaceID,
+                NumberOfAttendees = peopleAttending,
+                StartDate = startDate,
+                EndDate = endDate,
+                ReservedFor = reservedFor
+
+            };
+
+            int result = 0;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("INSERT INTO reservation VALUES (@space_id, @number_of_attendees, " +
+                    "@start_date, @end_date, @reserved_for);  " +
+                       "SELECT SCOPE_IDENTITY();", conn);
+                cmd.Parameters.AddWithValue("@space_id", newReservation.SpaceId);
+                cmd.Parameters.AddWithValue("@number_of_attendees", newReservation.NumberOfAttendees);
+                cmd.Parameters.AddWithValue("@start_date", newReservation.StartDate);
+                cmd.Parameters.AddWithValue("@end_date", newReservation.EndDate);
+                cmd.Parameters.AddWithValue("@reserved_for", newReservation.ReservedFor);
+
+                result = Convert.ToInt32(cmd.ExecuteScalar());
+
+            }
+
+            string confirmationID = result.ToString();
+
+
+
+            return confirmationID;
+        }
         //  public IList<Space> ListSpacesAvailable(IList<Space> spaces, IList<Reservation> reservations, DateTime startDate, int numOfDays, int peopleAttending)
 
     }

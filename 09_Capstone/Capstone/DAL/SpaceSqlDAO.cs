@@ -19,7 +19,7 @@ namespace Capstone.DAL
         public IList<Space> GetVenueSpaces(int venueNum)
         {
             IList<Space> spaces = new List<Space>();
-            
+
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -57,7 +57,7 @@ namespace Capstone.DAL
             {
                 int openFromNum = Convert.ToInt32(openFrom);
                 DateTime strDate = new DateTime(2000, openFromNum, 1);
-                string monthAbrev= strDate.ToString("MMM");
+                string monthAbrev = strDate.ToString("MMM");
                 space.OpenFrom = monthAbrev;
             }
 
@@ -78,5 +78,28 @@ namespace Capstone.DAL
             space.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
             return space;
         }
+
+        public Space GetBookedSpaceDetails(string spaceIDChosen)
+        {
+            Space chosenSpace = new Space();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE venue_id = " + spaceIDChosen + ";", conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    chosenSpace = ConvertReaderToTypeSpace(reader);
+
+                }
+
+            }
+            return chosenSpace;
+        }
+
     }
 }
+

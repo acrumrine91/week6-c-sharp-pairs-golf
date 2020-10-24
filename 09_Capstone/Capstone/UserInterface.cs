@@ -247,12 +247,18 @@ namespace Capstone
                 string reservedFor = Console.ReadLine();
 
                 //ADD METHOD TO GO TO CONFIRMATION AND TO ADD TO RESERVATION DATABASE
-
+                PrintReservationConfirmation(spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
 
 
             }
         }
+        public void PrintReservationConfirmation(string spaceIDChosen, string reservedFor, DateTime startDate, int numOfDays, int peopleAttending)
+        {
+            Space bookedSpace = spaceDAO.GetBookedSpaceDetails(spaceIDChosen);
+            string confirmationID = reservationDAO.AddReservationToSql(spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
 
+
+        }
 
     }
 
