@@ -195,7 +195,8 @@ namespace Capstone
                     Console.WriteLine("Please input the number of people attending");
                     return;
                 }
-                IList<Space> availableSpaces = reservationDAO.FindSpacesAvailable(spaces, reservations, startDate, numOfDays, peopleAttending);
+                bool isAvailable = reservationDAO.AreDatesAvailable(spaces, reservations, startDate, numOfDays);
+                Console.WriteLine("Still testing");
 
 
             }
