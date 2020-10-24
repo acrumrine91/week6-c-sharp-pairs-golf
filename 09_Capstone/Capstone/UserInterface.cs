@@ -195,9 +195,33 @@ namespace Capstone
                     Console.WriteLine("Please input the number of people attending");
                     return;
                 }
-                bool isAvailable = reservationDAO.AreDatesAvailable(spaces, reservations, startDate, numOfDays);
+                //bool isAvailable = reservationDAO.AreDatesAvailable(spaces, reservations, startDate, numOfDays);
                 Console.WriteLine("Still testing");
-
+                foreach(Space space in spaces)
+                {
+                    bool available = reservationDAO.IsDateAvailable(reservations, space, startDate, numOfDays);
+                    if (available == false)
+                    {
+                        spaces.Remove(space);
+                    }
+                }
+                foreach (Space space in spaces)
+                {
+                    bool available = reservationDAO.IsSpaceOperating(space, startDate, numOfDays);
+                    if (available == false)
+                    {
+                        spaces.Remove(space);
+                    }
+                }
+                foreach (Space space in spaces)
+                {
+                    bool available = reservationDAO.IsBookingBelowMaxOcc(space, peopleAttending);
+                    if (available == false)
+                    {
+                        spaces.Remove(space);
+                    }
+                }
+                Console.WriteLine(spaces);
 
             }
 
