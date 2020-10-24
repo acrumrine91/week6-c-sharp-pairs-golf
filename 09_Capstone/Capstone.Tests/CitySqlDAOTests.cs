@@ -9,7 +9,7 @@ using System.Transactions;
 namespace Capstone.Tests
 {
     [TestClass]
-    public class SpaceSqlDAOTests
+    public class CitySqlDAOTests
     {
         protected string ConnectionString { get; } = "Data Source=.\\sqlexpress;Initial Catalog=excelsior_venues;Integrated Security=True";
 
