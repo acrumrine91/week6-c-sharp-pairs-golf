@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -55,10 +56,71 @@ namespace Capstone.DAL
             return reservation;
         }
 
+        public bool IsDateAvailable(IList<Reservation> reservations, Space space, DateTime startDate, int numOfDays)
+        {
+            List<DateTime> newBookingDates = Enumerable.Range(0, numOfDays).Select(i => startDate.AddDays(i)).ToList();
+            foreach (Reservation rev in reservations)
+            {
+                if (rev.SpaceId == space.Id)
+                {
+                    int bookedDays = (rev.EndDate - rev.StartDate).Days + 1;
+                    List<DateTime> bookedRanged = Enumerable.Range(0, bookedDays).Select(i => rev.StartDate.AddDays(i)).ToList();
+                    bool alreadyBooked = newBookingDates.Intersect(bookedRanged).Any();
+                    if (alreadyBooked == true)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool IsSpaceOperating(Space space, DateTime startDate, int numOfDays)
+        {
+            List<DateTime> newBookingDates = Enumerable.Range(0, numOfDays).Select(i => startDate.AddDays(i)).ToList();
+            if (space.OpenFrom == "")
+            {
+                return true;
+            }
+
+            string[] monthAbbrevOpen = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
+            int index = Array.IndexOf(monthAbbrevOpen, space.OpenFrom) + 1;
+            DateTime openDay = new DateTime(2020, index, 1);
+
+            string[] monthAbbrevClose = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
+            int monthClose = Array.IndexOf(monthAbbrevClose, space.OpenTo) + 1;
+            DateTime closeDay = new DateTime(2020, monthClose + 1, 1).AddDays(-1);
+
+            int daysOpen = (closeDay - openDay).Days;
+            
+            List<DateTime> openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
+            bool openForBooking = newBookingDates.All(openRange.Contains);
+            if (openForBooking == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsBookingBelowMaxOcc(Space space, int peopleAttending)
+        {
+            if (peopleAttending > space.MaxOccupancy)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool AreDatesAvailable(IList<Space> spaces, IList<Reservation> reservations, DateTime startDate, int numOfDays)
         {
             List<DateTime> newBookingDates = Enumerable.Range(0, numOfDays).Select(i => startDate.AddDays(i)).ToList();
-            
+
+            List<int> spaceIDs = new List<int>();
+            foreach (Space space in spaces)
+            {
+
+            }
 
             foreach (Reservation rev in reservations)
             {
@@ -77,6 +139,8 @@ namespace Capstone.DAL
                     return true;
                 }
                 DateTime openDay = DateTime.Parse(spaces[index].OpenFrom);
+
+
                 DateTime closeDay = DateTime.Parse(spaces[index].OpenTo);
                 int daysOpen = (closeDay - openDay).Days + 31;
                 List<DateTime> openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
