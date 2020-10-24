@@ -13,6 +13,7 @@ namespace Capstone.DAL
         bool IsSpaceOperating(Space space, DateTime startDate, int numOfDays);
         bool IsBookingBelowMaxOcc(Space space, int peopleAttending);
 
+        string AddReservationToSql(string spaceIDChosen, string reservedFor, DateTime startDate, int numOfDays, int peopleAttending);
 
     }
 }

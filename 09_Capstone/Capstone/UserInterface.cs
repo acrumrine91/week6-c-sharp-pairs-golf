@@ -130,6 +130,7 @@ namespace Capstone
 
         public void ListVenueSpacesMenu(int venueNum)
         {
+
             venueNum += 1;
             bool done = false;
             while (!done)
@@ -138,7 +139,7 @@ namespace Capstone
                 IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
                 Console.WriteLine("");
                 Console.WriteLine("");
-                Console.WriteLine(venues[venueNum].Name);
+                Console.WriteLine(venues[venueNum - 1].Name);
                 Console.WriteLine("");
                 Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
                     "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
@@ -247,12 +248,36 @@ namespace Capstone
                 string reservedFor = Console.ReadLine();
 
                 //ADD METHOD TO GO TO CONFIRMATION AND TO ADD TO RESERVATION DATABASE
-
+                PrintReservationConfirmation(venueNum, spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
 
 
             }
         }
+        public void PrintReservationConfirmation(int venueNum, string spaceIDChosen, string reservedFor, DateTime startDate, int numOfDays, int peopleAttending)
+        {
+            Space bookedSpace = spaceDAO.GetBookedSpaceDetails(spaceIDChosen);
+            IList<Venue> venues = venueDAO.GetVenues();
+            string confirmationID = reservationDAO.AddReservationToSql(spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
+            string numattend = Convert.ToString(peopleAttending);
+            string startDateString = Convert.ToString(startDate);
+            DateTime endDate = startDate.AddDays(numOfDays);
+            string endDateString = Convert.ToString(endDate);
+            string totalCost = Convert.ToString(numOfDays * bookedSpace.DailyRate);
 
+
+            Console.WriteLine("");
+            Console.WriteLine("Thanks for submitting your reservation!");
+            Console.WriteLine("Your details and confirmation ID are listed below");
+            Console.WriteLine("");
+            Console.WriteLine("Confirmation #: " + confirmationID);
+            Console.WriteLine("Venue: " + venues[venueNum - 1].Name);
+            Console.WriteLine("Space: " + bookedSpace.Name);
+            Console.WriteLine("Reserved For: " + reservedFor);
+            Console.WriteLine("Attendees: " + numattend);
+            Console.WriteLine("Arrival Date: " + startDateString);
+            Console.WriteLine("Depart Date: " + endDateString);
+            Console.WriteLine("Total Cost: " + totalCost);
+        }
 
     }
 
