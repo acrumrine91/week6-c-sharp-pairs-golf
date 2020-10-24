@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Capstone.DAL;
+using System.Globalization;
 
 namespace Capstone
 {
@@ -74,16 +75,15 @@ namespace Capstone
                 Console.WriteLine("Press any other key to RETURN to our main menu.");
                 string userInput = Console.ReadLine();
 
-                bool isParsable = Int32.TryParse(userInput, out int userNumber);
+                int userNumber = int.Parse(userInput);
                 int venueNum = userNumber - 1;
-                if (isParsable)
+
+                if ((venueNum >= 0) && (venueNum < venues.Count))
                 {
-                    if ((venueNum >= 0) && (venueNum < venues.Count))
-                    {
-                        VenueDetailsMenu(venueNum);
-                    }
-                    else return;
+                    VenueDetailsMenu(venueNum);
                 }
+
+
                 else done = true;
             }
 
@@ -122,6 +122,7 @@ namespace Capstone
                 else if (userInput == "2")
                 {
                     SearchAndMakeReservationMenu(venueNum);
+
                 }
 
                 else done = true;
@@ -131,7 +132,6 @@ namespace Capstone
         public void ListVenueSpacesMenu(int venueNum)
         {
 
-            venueNum += 1;
             bool done = false;
             while (!done)
             {
@@ -139,7 +139,7 @@ namespace Capstone
                 IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
                 Console.WriteLine("");
                 Console.WriteLine("");
-                Console.WriteLine(venues[venueNum - 1].Name);
+                Console.WriteLine(venues[venueNum].Name);
                 Console.WriteLine("");
                 Console.WriteLine("ID".PadRight(4) + "Name".PadRight(25) + "Handicap Access".PadRight(20) +
                     "Open".PadRight(10) + "Close".PadRight(10) + "Daily Rate".PadRight(15) + "Max Occup.".PadRight(10));
@@ -173,17 +173,17 @@ namespace Capstone
                 Console.WriteLine("When do you need the space? MM/DD/YEAR");
                 string inputDay = Console.ReadLine();
 
-                bool correctInput = DateTime.TryParse(inputDay, out DateTime startDate);
-                if (correctInput == false || startDate < DateTime.Now)
+                DateTime startDate = DateTime.Parse(inputDay);
+                if (startDate < DateTime.Now)
                 {
-                    Console.WriteLine("Please input a correct date format");
+                    Console.WriteLine("Please input a future date!");
                     return;
                 }
                 Console.WriteLine("How many days will you need the space?");
                 string dayNumber = Console.ReadLine();
 
-                bool parseDays = Int32.TryParse(dayNumber, out int numOfDays);
-                if (parseDays == false || numOfDays <= 0)
+                int numOfDays = Convert.ToInt32(dayNumber);
+                if (numOfDays <= 0)
                 {
                     Console.WriteLine("Please input a number of days");
                     return;
@@ -191,8 +191,8 @@ namespace Capstone
                 Console.WriteLine("How many people will be in attendance?");
                 string attendNum = Console.ReadLine();
 
-                bool parseOccupancy = Int32.TryParse(dayNumber, out int peopleAttending);
-                if (parseOccupancy == false || peopleAttending <= 0)
+                int peopleAttending = Convert.ToInt32(attendNum);
+                if (peopleAttending <= 0)
                 {
                     Console.WriteLine("Please input the number of people attending");
                     return;
@@ -211,6 +211,7 @@ namespace Capstone
                 }
                 foreach (Space space in spaces)
                 {
+
                     bool available = reservationDAO.IsSpaceOperating(space, startDate, numOfDays);
                     if (available == false)
                     {
@@ -250,11 +251,12 @@ namespace Capstone
                 //ADD METHOD TO GO TO CONFIRMATION AND TO ADD TO RESERVATION DATABASE
                 PrintReservationConfirmation(venueNum, spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
 
-
+                done = true;
             }
         }
         public void PrintReservationConfirmation(int venueNum, string spaceIDChosen, string reservedFor, DateTime startDate, int numOfDays, int peopleAttending)
         {
+
             Space bookedSpace = spaceDAO.GetBookedSpaceDetails(spaceIDChosen);
             IList<Venue> venues = venueDAO.GetVenues();
             string confirmationID = reservationDAO.AddReservationToSql(spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
@@ -263,6 +265,7 @@ namespace Capstone
             DateTime endDate = startDate.AddDays(numOfDays);
             string endDateString = Convert.ToString(endDate);
             string totalCost = Convert.ToString(numOfDays * bookedSpace.DailyRate);
+
 
 
             Console.WriteLine("");
@@ -277,6 +280,11 @@ namespace Capstone
             Console.WriteLine("Arrival Date: " + startDateString);
             Console.WriteLine("Depart Date: " + endDateString);
             Console.WriteLine("Total Cost: " + totalCost);
+            Console.WriteLine("");
+            Console.WriteLine("Press any key and/or ENTER to leave the confirmation print scren and view a list of venues");
+            string end = Console.ReadLine();
+            GetVenues();
+
         }
 
     }

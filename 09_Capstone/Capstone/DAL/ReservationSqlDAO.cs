@@ -63,12 +63,15 @@ namespace Capstone.DAL
             {
                 if (rev.SpaceId == space.Id)
                 {
-                    int bookedDays = (rev.EndDate - rev.StartDate).Days + 1;
+                     int bookedDays = (rev.EndDate - rev.StartDate).Days + 1;
                     List<DateTime> bookedRanged = Enumerable.Range(0, bookedDays).Select(i => rev.StartDate.AddDays(i)).ToList();
-                    bool alreadyBooked = newBookingDates.Intersect(bookedRanged).Any();
-                    if (alreadyBooked == true)
+
+                    foreach (DateTime booking in bookedRanged)
                     {
-                        return false;
+                        if (newBookingDates.Contains(booking))
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -89,7 +92,8 @@ namespace Capstone.DAL
 
             string[] monthAbbrevClose = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
             int monthClose = Array.IndexOf(monthAbbrevClose, space.OpenTo) + 1;
-            DateTime closeDay = new DateTime(2020, monthClose + 1, 1).AddDays(-1);
+            int days = DateTime.DaysInMonth(2020, monthClose);
+            DateTime closeDay = new DateTime(2020, monthClose, days);
 
             int daysOpen = (closeDay - openDay).Days;
             
