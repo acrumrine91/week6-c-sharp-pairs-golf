@@ -197,8 +197,6 @@ namespace Capstone
                     Console.WriteLine("Please input the number of people attending");
                     return;
                 }
-                //bool isAvailable = reservationDAO.AreDatesAvailable(spaces, reservations, startDate, numOfDays);
-                //Console.WriteLine("Still testing");
 
                 List<Space> toRemove = new List<Space>();
                 foreach (Space space in spaces)
@@ -265,7 +263,7 @@ namespace Capstone
             DateTime endDate = startDate.AddDays(numOfDays);
             string endDateString = Convert.ToString(endDate);
             string totalCost = Convert.ToString(numOfDays * bookedSpace.DailyRate);
-
+            totalCost.Substring(totalCost.Length - 2);
 
 
             Console.WriteLine("");
@@ -273,13 +271,13 @@ namespace Capstone
             Console.WriteLine("Your details and confirmation ID are listed below");
             Console.WriteLine("");
             Console.WriteLine("Confirmation #: " + confirmationID);
-            Console.WriteLine("Venue: " + venues[venueNum - 1].Name);
+            Console.WriteLine("Venue: " + venues[venueNum].Name);
             Console.WriteLine("Space: " + bookedSpace.Name);
             Console.WriteLine("Reserved For: " + reservedFor);
             Console.WriteLine("Attendees: " + numattend);
             Console.WriteLine("Arrival Date: " + startDateString);
             Console.WriteLine("Depart Date: " + endDateString);
-            Console.WriteLine("Total Cost: " + totalCost);
+            Console.WriteLine("Total Cost: $" + totalCost);
             Console.WriteLine("");
             Console.WriteLine("Press any key and/or ENTER to leave the confirmation print scren and view a list of venues");
             string end = Console.ReadLine();

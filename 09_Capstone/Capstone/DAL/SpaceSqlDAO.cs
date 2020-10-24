@@ -87,7 +87,7 @@ namespace Capstone.DAL
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE id = " + spaceIDChosen + ";", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE id = " + spaceID + ";", conn);
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
