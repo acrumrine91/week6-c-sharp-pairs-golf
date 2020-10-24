@@ -9,7 +9,7 @@ using System.Transactions;
 namespace Capstone.Tests
 {
     [TestClass]
-    public class VenueSqlDAOTests
+    public class SpaceSqlDAOTests
     {
         protected string ConnectionString { get; } = "Data Source=.\\sqlexpress;Initial Catalog=excelsior_venues;Integrated Security=True";
 
@@ -26,18 +26,18 @@ namespace Capstone.Tests
         {
             transaction.Dispose();
         }
-       
+
         [TestMethod]
-        public void GetVenuesShouldReturnAllVenues()
+        public void GetVenueSpacesShouldReturnAllVenueSpaces()
         {
             //Arrange
-            VenueSqlDAO dao = new VenueSqlDAO(ConnectionString);
+            SpaceSqlDAO dao = new SpaceSqlDAO(ConnectionString);
 
             //Act
-            IList<Venue> venues = dao.GetVenues();
+            IList<Space> spaces = dao.GetVenueSpaces(1);
 
             //Assert
-            Assert.AreEqual(15, venues.Count);
+            Assert.AreEqual(7, spaces.Count);
         }
     }
 }

@@ -130,6 +130,7 @@ namespace Capstone
 
         public void ListVenueSpacesMenu(int venueNum)
         {
+            venueNum += 1;
             bool done = false;
             while (!done)
             {
