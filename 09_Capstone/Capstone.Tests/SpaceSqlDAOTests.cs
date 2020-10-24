@@ -30,6 +30,7 @@ namespace Capstone.Tests
         [TestMethod]
         [DataRow(1, 7)]
         [DataRow(2, 4)]
+        [DataRow(3, 4)]
         public void GetVenueSpacesShouldReturnAllVenueSpaces(int venueNum, int expectedCount)
         {
             //Arrange
