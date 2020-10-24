@@ -19,13 +19,13 @@ namespace Capstone.DAL
         public IList<Space> GetVenueSpaces(int venueNum)
         {
             IList<Space> spaces = new List<Space>();
-            int venueID = venueNum + 1;
+            
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE venue_id = " + venueID + ";", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE venue_id = " + venueNum + ";", conn);
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
