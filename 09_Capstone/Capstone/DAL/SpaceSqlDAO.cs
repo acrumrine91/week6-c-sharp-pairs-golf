@@ -20,12 +20,12 @@ namespace Capstone.DAL
         {
             IList<Space> spaces = new List<Space>();
 
-
+            string venue_id = (venueNum + 1).ToString();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE venue_id = " + venueNum + ";", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE venue_id = " + venue_id + ";", conn);
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -81,12 +81,13 @@ namespace Capstone.DAL
 
         public Space GetBookedSpaceDetails(string spaceIDChosen)
         {
+            int spaceID = int.Parse(spaceIDChosen);
             Space chosenSpace = new Space();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE venue_id = " + spaceIDChosen + ";", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM space WHERE id = " + spaceID + ";", conn);
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
