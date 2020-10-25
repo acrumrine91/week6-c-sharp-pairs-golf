@@ -85,19 +85,33 @@ namespace Capstone.DAL
             {
                 return true;
             }
+            int yearOfBooking = startDate.Year;
 
             string[] monthAbbrevOpen = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
             int index = Array.IndexOf(monthAbbrevOpen, space.OpenFrom) + 1;
-            DateTime openDay = new DateTime(2020, index, 1);
-
+ 
             string[] monthAbbrevClose = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
             int monthClose = Array.IndexOf(monthAbbrevClose, space.OpenTo) + 1;
-            int days = DateTime.DaysInMonth(2020, monthClose);
-            DateTime closeDay = new DateTime(2020, monthClose, days);
-
+            
+            DateTime openDay = new DateTime(yearOfBooking, index, 1);
+            //For the year 2020
+            int days = DateTime.DaysInMonth(yearOfBooking, monthClose);
+            DateTime closeDay = new DateTime(yearOfBooking, monthClose, days);
             int daysOpen = (closeDay - openDay).Days;
-
             List<DateTime> openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
+
+            //For the year 2021
+            DateTime openDayNext = new DateTime(yearOfBooking, index, 1);
+            int day2021 = DateTime.DaysInMonth(yearOfBooking + 1, monthClose);
+            DateTime closeDayNext = new DateTime(yearOfBooking +1, monthClose, days);
+            int daysOpenNext = (closeDayNext - openDayNext).Days;
+            List<DateTime> openRange2021 = Enumerable.Range(0, daysOpen).Select(i => openDayNext.AddDays(i)).ToList();
+            foreach (DateTime date in openRange2021)
+            {
+                openRange.Add(date);
+            }
+
+            openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
             bool openForBooking = newBookingDates.All(openRange.Contains);
             if (openForBooking == false)
             {

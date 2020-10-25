@@ -176,35 +176,65 @@ namespace Capstone
             IList<Venue> venues = venueDAO.GetVenues();
             IList<Space> spaces = spaceDAO.GetVenueSpaces(venueNum);
             IList<Reservation> reservations = reservationDAO.GetReservations(spaces);
+            DateTime startDate = new DateTime();
+            int numOfDays = 0;
+            int peopleAttending = 0;
+
             bool done = false;
             while (!done)
             {
-                Console.WriteLine("Search for available spaces");
-                Console.WriteLine("When do you need the space? MM/DD/YEAR");
-                string inputDay = Console.ReadLine();
-
-                DateTime startDate = DateTime.Parse(inputDay);
-                if (startDate < DateTime.Now)
+                try
                 {
-                    Console.WriteLine("Please input a future date!");
+                    Console.WriteLine("Search for available spaces");
+                    Console.WriteLine("Note: Dates booked after Jan 1st 2 years from today will require additional confirmation");
+                    Console.WriteLine("When do you need the space? MM/DD/YEAR");
+                    string inputDay = Console.ReadLine();
+
+                    startDate = DateTime.Parse(inputDay);
+                    if (startDate < DateTime.Now)
+                    {
+                        Console.WriteLine("Please input a future date!");
+                        return;
+                    }
+                }
+                catch (System.FormatException)
+                {
+                    Console.WriteLine("Please enter your date as a Month Number/Day/Full Year");
                     return;
                 }
+
                 Console.WriteLine("How many days will you need the space?");
                 string dayNumber = Console.ReadLine();
-
-                int numOfDays = Convert.ToInt32(dayNumber);
-                if (numOfDays <= 0)
+                try
                 {
-                    Console.WriteLine("Please input a number of days");
+                    numOfDays = Convert.ToInt32(dayNumber);
+                    if (numOfDays <= 0)
+                    {
+                        Console.WriteLine("Please input a positive number of days");
+                        return;
+                    }
+                }
+                catch (System.FormatException)
+                {
+                    Console.WriteLine("Please enter the length of your reservation as a number");
                     return;
                 }
+
                 Console.WriteLine("How many people will be in attendance?");
                 string attendNum = Console.ReadLine();
 
-                int peopleAttending = Convert.ToInt32(attendNum);
-                if (peopleAttending <= 0)
+                try
                 {
-                    Console.WriteLine("Please input the number of people attending");
+                    peopleAttending = Convert.ToInt32(attendNum);
+                    if (peopleAttending <= 0)
+                    {
+                        Console.WriteLine("Please input the number of people attending");
+                        return;
+                    }
+                }
+                catch (System.FormatException)
+                {
+                    Console.WriteLine("Please enter the expected attendance as a number");
                     return;
                 }
 
@@ -269,9 +299,11 @@ namespace Capstone
             IList<Venue> venues = venueDAO.GetVenues();
             string confirmationID = reservationDAO.AddReservationToSql(spaceIDChosen, reservedFor, startDate, numOfDays, peopleAttending);
             string numattend = Convert.ToString(peopleAttending);
+            
             string startDateString = Convert.ToString(startDate);
             DateTime endDate = startDate.AddDays(numOfDays);
             string endDateString = Convert.ToString(endDate);
+            
             string totalCost = Convert.ToString(numOfDays * bookedSpace.DailyRate);
             totalCost.Substring(totalCost.Length - 2);
 
