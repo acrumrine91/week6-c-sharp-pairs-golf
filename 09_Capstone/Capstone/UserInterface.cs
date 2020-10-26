@@ -163,6 +163,7 @@ namespace Capstone
                 string userInput = Console.ReadLine();
                 if (userInput == "1")
                 {
+                    venueNum -= 1;
                     SearchAndMakeReservationMenu(venueNum);
                 }
                 done = true;
