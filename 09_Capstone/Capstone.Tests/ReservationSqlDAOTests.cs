@@ -9,7 +9,7 @@ using System.Transactions;
 namespace Capstone.Tests
 {
     [TestClass]
-    public class CitySqlDAOTests
+    public class ReservationSqlDAOTests
     {
         protected string ConnectionString { get; } = "Data Source=.\\sqlexpress;Initial Catalog=excelsior_venues;Integrated Security=True";
 
@@ -20,27 +20,26 @@ namespace Capstone.Tests
         {
             transaction = new TransactionScope();
         }
-
+        
         [TestCleanup]
         public void Cleanup()
         {
             transaction.Dispose();
         }
-
+        
         [TestMethod]
-        [DataRow(1, "Bona")]
-        [DataRow(2, "Srulbury")]
-        [DataRow(3, "Yepford")]
-        public void GetVenueCityShouldReturnVenueCity(int cityNum, string expectedCityName)
+        
+        public void GetReservationsShouldReturnAllReservations()
         {
             //Arrange
-            CitySqlDAO dao = new CitySqlDAO(ConnectionString);
+            ReservationSqlDAO dao = new ReservationSqlDAO(ConnectionString);
+            
 
             //Act
-            City cityPlace = dao.GetVenueCity(cityNum);
+            
 
             //Assert
-            Assert.AreEqual(expectedCityName, cityPlace.Name);
+            
         }
     }
 }

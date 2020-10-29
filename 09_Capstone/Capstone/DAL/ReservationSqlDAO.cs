@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Capstone.DAL
 {
-    class ReservationSqlDAO : IReservationDAO
+    public class ReservationSqlDAO : IReservationDAO
     {
         private string connectionString;
 
