@@ -62,16 +62,18 @@ namespace Capstone
 
         private void GetVenues()
         {
+
+
             try
             {
-
+                //requires a try catch around it because we parse inside a while loop
                 bool done = false;
                 while (!done)
                 {
                     IList<Venue> venues = venueDAO.GetVenues();
                     Console.WriteLine("~~ View Venues Menu ~~");
                     Console.WriteLine("Please type in the number of the venue you want to select below");
-                    for (int index = 0; index < venues.Count; index++)
+                    for (int index = 0; index < venues.Count; index++) //if they hit any number other than a venue number, goes back a menu
                     {
                         Console.WriteLine(index + 1 + ") - " + venues[index].Name);
                     }
@@ -140,7 +142,7 @@ namespace Capstone
 
         public void ListVenueSpacesMenu(int venueNum)
         {
-            venueNum += 1;
+            venueNum += 1; //switches from checking against the index to checking against the database ID
             bool done = false;
             while (!done)
             {
@@ -163,7 +165,7 @@ namespace Capstone
                 string userInput = Console.ReadLine();
                 if (userInput == "1")
                 {
-                    venueNum -= 1;
+                    venueNum -= 1; // has to switch back to checking against index because of the search/make res menu +1
                     SearchAndMakeReservationMenu(venueNum);
                 }
                 done = true;
@@ -184,10 +186,10 @@ namespace Capstone
             bool done = false;
             while (!done)
             {
+                //different try catch statements for each parse check because a different error message is returned
                 try
                 {
                     Console.WriteLine("Search for available spaces");
-                    Console.WriteLine("Note: Dates booked after Jan 1st 2 years from today will require additional confirmation");
                     Console.WriteLine("When do you need the space? MM/DD/YEAR");
                     string inputDay = Console.ReadLine();
 
@@ -240,6 +242,7 @@ namespace Capstone
                 }
 
                 List<Space> toRemove = new List<Space>();
+                //creates a list of items to remove from the list of Spaces - each bool check adds to the list
                 foreach (Space space in spaces)
                 {
                     bool available = reservationDAO.IsDateAvailable(reservations, space, startDate, numOfDays);
@@ -269,6 +272,7 @@ namespace Capstone
                 {
                     spaces.Remove(removal);
                 }
+                //removes all Space objects that are in the list toRemove from the list spaces
 
                 Console.WriteLine("");
                 Console.WriteLine("Space #".PadRight(9) + "Name".PadRight(25) + "Daily Rate".PadRight(12) +

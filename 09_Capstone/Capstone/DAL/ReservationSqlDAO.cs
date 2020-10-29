@@ -58,16 +58,19 @@ namespace Capstone.DAL
 
         public bool IsDateAvailable(IList<Reservation> reservations, Space space, DateTime startDate, int numOfDays)
         {
+            //creates a list of new booking dates
             List<DateTime> newBookingDates = Enumerable.Range(0, numOfDays).Select(i => startDate.AddDays(i)).ToList();
             foreach (Reservation rev in reservations)
             {
                 if (rev.SpaceId == space.Id)
                 {
+                    //creates a list of already booked dates
                     int bookedDays = (rev.EndDate - rev.StartDate).Days + 1;
                     List<DateTime> bookedRanged = Enumerable.Range(0, bookedDays).Select(i => rev.StartDate.AddDays(i)).ToList();
 
                     foreach (DateTime booking in bookedRanged)
                     {
+                        // the list of already booked dates and sees if there is any booking date matches
                         if (newBookingDates.Contains(booking))
                         {
                             return false;
@@ -80,37 +83,44 @@ namespace Capstone.DAL
 
         public bool IsSpaceOperating(Space space, DateTime startDate, int numOfDays)
         {
+            //creates a list of booking dates 
             List<DateTime> newBookingDates = Enumerable.Range(0, numOfDays).Select(i => startDate.AddDays(i)).ToList();
-            if (space.OpenFrom == "")
+            if (space.OpenFrom == "") //if there are no limited open dates the whole method returns true
             {
                 return true;
             }
             int yearOfBooking = startDate.Year;
 
+            //converts our month abbreviation for the opening month into an integer
             string[] monthAbbrevOpen = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
             int index = Array.IndexOf(monthAbbrevOpen, space.OpenFrom) + 1;
  
+            //converts our month abbreviation for the closing month into an integer
             string[] monthAbbrevClose = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedMonthNames;
             int monthClose = Array.IndexOf(monthAbbrevClose, space.OpenTo) + 1;
-            
+
+            //For the year of booking
+            //creates a list containing all the dates in which that space is open
             DateTime openDay = new DateTime(yearOfBooking, index, 1);
-            //For the year 2020
             int days = DateTime.DaysInMonth(yearOfBooking, monthClose);
             DateTime closeDay = new DateTime(yearOfBooking, monthClose, days);
             int daysOpen = (closeDay - openDay).Days;
             List<DateTime> openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
 
-            //For the year 2021
+            //checking for the following year
+            //creates a list containing all the dates in which that space is open
             DateTime openDayNext = new DateTime(yearOfBooking, index, 1);
             int day2021 = DateTime.DaysInMonth(yearOfBooking + 1, monthClose);
             DateTime closeDayNext = new DateTime(yearOfBooking +1, monthClose, days);
             int daysOpenNext = (closeDayNext - openDayNext).Days;
             List<DateTime> openRange2021 = Enumerable.Range(0, daysOpen).Select(i => openDayNext.AddDays(i)).ToList();
-            foreach (DateTime date in openRange2021)
+
+            foreach (DateTime date in openRange2021) // adds the list of the upcoming year to the first list
             {
                 openRange.Add(date);
             }
 
+            //ensures that the entire list of new booking dates are held within the open dates of the space
             openRange = Enumerable.Range(0, daysOpen).Select(i => openDay.AddDays(i)).ToList();
             bool openForBooking = newBookingDates.All(openRange.Contains);
             if (openForBooking == false)
